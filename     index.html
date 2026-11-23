@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101735">
+<title>غلب Python ⚡</title>
+<style>
+:root{--bg:#090f24;--panel:#151e3d;--line:#293762;--text:#f4f5ff;--muted:#a8b3dc;--blue:#6878ff;--gold:#ffb642;--green:#35d69a;--red:#ff5c7a}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#111a3b,#080d1e);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;padding:22px 14px}
+main{max-width:760px;margin:auto}.top{text-align:center;margin:10px 0 22px}.top h1{font-size:clamp(30px,7vw,48px);margin:0 0 8px}.top h1 span{color:var(--gold)}.top p{color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.stat,.card{background:rgba(22,31,62,.96);border:1px solid var(--line);border-radius:22px}.stat{text-align:center;padding:14px 6px}.stat strong{display:block;font-size:30px}.stat small{color:var(--muted);font-size:14px}.stat:nth-child(1) strong{color:var(--red)}.stat:nth-child(2) strong{color:var(--gold)}.stat:nth-child(3) strong{color:var(--green)}
+.card{padding:22px;margin-bottom:16px}.status{text-align:center;color:var(--muted);font-size:18px;margin:0 0 18px}.sticks{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 7px;min-height:160px;align-content:center;padding:8px 0 22px}.stick{width:clamp(12px,3.7vw,21px);height:clamp(82px,17vw,126px);position:relative;border-radius:0 0 8px 8px;background:linear-gradient(90deg,#9b6127,#ffd18a 45%,#b87931);box-shadow:inset 1px 0 2px #fff6}.stick:before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:clamp(19px,4.6vw,29px);height:clamp(19px,4.6vw,29px);border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8c75,#ef3e42 70%);box-shadow:0 2px 5px #0005}
+.question{text-align:center;font-size:clamp(20px,4.8vw,28px);font-weight:750;margin:8px 0 18px}.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.take{border:0;border-radius:18px;background:var(--blue);color:white;font-weight:800;font-size:25px;padding:20px 5px;cursor:pointer}.take:disabled{opacity:.35;cursor:not-allowed}.take:active,.action:active{transform:scale(.98)}
+.row{display:flex;gap:10px;margin-top:12px}.action{flex:1;border:1px solid var(--line);border-radius:15px;padding:15px 10px;background:transparent;color:var(--text);font-size:17px;font-weight:700;cursor:pointer}.action.primary{background:var(--gold);color:#241600;border:0}
+.settings{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;color:var(--muted);font-size:15px;margin:12px 0}.settings select{background:#202c54;color:white;border:1px solid var(--line);border-radius:10px;padding:9px}
+.rules h2{margin:0 0 8px;font-size:22px}.rules p{color:var(--muted);line-height:1.8;margin:7px 0}.note{color:var(--gold)!important}
+@media(max-width:430px){.card{padding:17px 13px}.take{font-size:21px;padding:17px 3px}.row{flex-direction:column}.stats{gap:7px}.stat{border-radius:16px}}
+</style>
+</head>
+<body>
+<main>
+  <header class="top"><h1>⚡ غلب <span>Python</span></h1><p>لعبة 21 عود — اللي ياخذ العود الأخير كيخسر!</p></header>
+  <section class="stats">
+    <div class="stat"><strong id="wins">0</strong><small>ربحاتك</small></div>
+    <div class="stat"><strong id="remaining">21</strong><small>باقي من العواد</small></div>
+    <div class="stat"><strong id="losses">0</strong><small>ربحات Python</small></div>
+  </section>
+  <section class="card">
+    <p class="status" id="status" aria-live="polite">اختار شكون يبدا، ومن بعد بدا اللعب.</p>
+    <div class="sticks" id="sticks" aria-label="العواد المتبقية"></div>
+    <div class="question">شحال من عود غادي تاخد؟</div>
+    <div class="buttons">
+      <button class="take" data-take="1">خود 1</button>
+      <button class="take" data-take="2">خود 2</button>
+      <button class="take" data-take="3">خود 3</button>
+    </div>
+    <div class="row">
+      <button class="action" id="reset">صفر النتيجة</button>
+      <button class="action primary" id="new">لعبة جديدة</button>
+    </div>
+    <div class="settings">
+      <label for="starter">شكون يبدا؟</label>
+      <select id="starter"><option value="ai">Python يبدا</option><option value="player">أنا نبدا</option></select>
+      <label for="level">المستوى</label>
+      <select id="level"><option value="smart">ذكي</option><option value="easy">ساهل</option></select>
+    </div>
+  </section>
+  <section class="card rules">
+    <h2>كيفاش تلعب؟</h2>
+    <p>كل دور تقدر تاخذ 1 أو 2 أو 3 ديال العواد. من بعد كيلعب الطرف الآخر. اللي ياخذ آخر عود هو الخاسر.</p>
+    <p class="note">نصيحة: فالمستوى الذكي، حاول تخلي لخصمك 17 أو 13 أو 9 أو 5 أو 1 عود باش تزيد فرصتك فالربح.</p>
+  </section>
+</main>
+<script>
+let count=21, turn='player', over=false, wins=0, losses=0, busy=false;
+const $=id=>document.getElementById(id);
+function draw(){
+  $('remaining').textContent=count;
+  $('sticks').innerHTML='';
+  for(let i=0;i<count;i++){const s=document.createElement('span');s.className='stick';$('sticks').appendChild(s);}
+  document.querySelectorAll('.take').forEach(b=>b.disabled=over||turn!=='player'||busy||Number(b.dataset.take)>count);
+}
+function message(t){$('status').textContent=t}
+function finish(loser){
+  over=true;
+  if(loser==='player'){losses++;message('😅 خسرت! خديتي العود الأخير. جرب مرة أخرى!');}
+  else {wins++;message('🎉 برافو! ربحتي Python!');}
+  $('wins').textContent=wins;$('losses').textContent=losses;draw();
+}
+function take(n,who){
+  if(over||n<1||n>3||n>count)return;
+  count-=n;
+  if(count===0){finish(who);return;}
+  turn=who==='player'?'ai':'player';
+  if(turn==='ai'){message('🤖 Python كيفكر...');draw();setTimeout(aiMove,650);}
+  else{message('دورك! اختار من 1 حتى 3 عواد.');draw();}
+}
+function aiMove(){
+  if(over)return;
+  let n;
+  if($('level').value==='smart'){
+    // In this misere game, leave 1 mod 4 to the opponent when possible.
+    n=(count-1)%4;
+    if(n<1||n>3)n=1+Math.floor(Math.random()*Math.min(3,count));
+  }else n=1+Math.floor(Math.random()*Math.min(3,count));
+  n=Math.min(n,count);
+  message('Python خدا '+n+' عود.');
+  take(n,'ai');
+}
+function newGame(){
+  count=21;over=false;busy=false;draw();
+  if($('starter').value==='ai'){turn='ai';message('Python غادي يبدا...');draw();setTimeout(aiMove,650);}
+  else{turn='player';message('دورك! اختار 1 أو 2 أو 3 عواد.');draw();}
+}
+document.querySelectorAll('.take').forEach(b=>b.addEventListener('click',()=>take(Number(b.dataset.take),'player')));
+$('new').addEventListener('click',newGame);
+$('reset').addEventListener('click',()=>{wins=0;losses=0;$('wins').textContent=0;$('losses').textContent=0;newGame();});
+$('starter').addEventListener('change',newGame);
+draw();message('اختار شكون يبدا، ومن بعد ضغط على «لعبة جديدة».');
+</script>
+</body>
+</html>
